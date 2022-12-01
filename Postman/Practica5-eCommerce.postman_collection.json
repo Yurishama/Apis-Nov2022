@@ -1,0 +1,932 @@
+{
+	"info": {
+		"_postman_id": "0d83de74-8225-4083-8aaf-8ce257c39c48",
+		"name": "Practica 5 - eCommerce",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10841359"
+	},
+	"item": [
+		{
+			"name": "ObtenerCategoria2020yPrecio",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validar el código de respuesta sea igual a 200\", function(){",
+							"    pm.expect(pm.response.code).to.eql(200)",
+							"});",
+							"",
+							"pm.test(\"Validar que el tiempo de respuesta es menor a 1 seg\", function(){",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000)",
+							"});",
+							"",
+							"pm.test(\"Validar que el body no viene vacio\", function(){",
+							"    pm.expect(pm.response.body).not.to.be.null;",
+							"});",
+							"",
+							"pm.test(\"Validar que el body response contenga un filtro\", function(){",
+							"    pm.expect(pm.response.text()).to.include('/anuncios/mexico/autos-y-camionetas?precio=-60000')",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*",
+						"type": "text"
+					},
+					{
+						"key": "origin",
+						"value": "https://www.segundamano.mx",
+						"type": "text"
+					},
+					{
+						"key": "referer",
+						"value": "https://www.segundamano.mx",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"filters\": [{\n\t\t\"price\": \"-60000\",\n\t\t\"category\": \"2020\"\n\t}, {\n\t\t\"price\": \"60000-80000\",\n\t\t\"category\": \"2020\"\n\t}, {\n\t\t\"price\": \"80000-100000\",\n\t\t\"category\": \"2020\"\n\t}, {\n\t\t\"price\": \"100000-150000\",\n\t\t\"category\": \"2020\"\n\t}, {\n\t\t\"price\": \"150000-\",\n\t\t\"category\": \"2020\"\n\t}]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{url_base}}/urls/v1/public/ad-listing?lang=es",
+					"protocol": "https",
+					"host": [
+						"{{url_base}}"
+					],
+					"path": [
+						"urls",
+						"v1",
+						"public",
+						"ad-listing"
+					],
+					"query": [
+						{
+							"key": "lang",
+							"value": "es"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ObtenerListadoAnuncios",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validar el código de respuesta sea igual a 200\", function(){",
+							"    pm.expect(pm.response.code).to.eql(200)",
+							"});",
+							"",
+							"pm.test(\"Validar que el tiempo de respuesta es menor a 1 seg\", function(){",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000)",
+							"});",
+							"",
+							"pm.test(\"Validar que el body no viene vacio\", function(){",
+							"    pm.expect(pm.response.body).not.to.be.null;",
+							"});",
+							"",
+							"pm.test(\"Validar que el body response contenga los campos de un anuncio\", function(){",
+							"    pm.expect(pm.response.text()).to.include('list_id')",
+							"    pm.expect(pm.response.text()).to.include('subject')",
+							"});",
+							"",
+							"pm.test(\"Validar que el campo subject regresa un dato tipo STRING\", function(){",
+							"    console.log(\"Response body:  \", typeof (pm.response.json().data.items[0].subject))",
+							"    var subject = pm.response.json().data.items[0].subject;",
+							"    pm.expect(subject).to.be.a(\"string\")",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{url_base}}/highlights/v1/public/highlights?prio=1&cat=2020&lim=1",
+					"protocol": "https",
+					"host": [
+						"{{url_base}}"
+					],
+					"path": [
+						"highlights",
+						"v1",
+						"public",
+						"highlights"
+					],
+					"query": [
+						{
+							"key": "prio",
+							"value": "1"
+						},
+						{
+							"key": "cat",
+							"value": "2020"
+						},
+						{
+							"key": "lim",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearUsuarioConVariablesDinamicas",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validar el código de respuesta sea igual a 401\", function(){",
+							"    pm.expect(pm.response.code).to.eql(401)",
+							"});",
+							"",
+							"pm.test(\"Validar que el tiempo de respuesta es menor a 2seg\", function(){",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000)",
+							"});",
+							"",
+							"pm.test(\"Validar que el body no viene vacio\", function(){",
+							"    pm.expect(pm.response.body).not.to.be.null;",
+							"});",
+							"",
+							"pm.test(\"Validar que el body response contenga account verification rquired\", function(){",
+							"    pm.expect(pm.response.text()).to.include('ACCOUNT_VERIFICATION_REQUIRED')",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var emailDinamico = pm.variables.replaceIn(\"{{$randomEmail}}\")",
+							"pm.environment.set(\"emailDinamico\", emailDinamico)",
+							"",
+							"var passDinamico = pm.variables.replaceIn('{{$randomPassword}}')",
+							"pm.environment.set(\"passDinamico\",passDinamico)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{passDinamico}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{emailDinamico}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic dmVudGFzXzIzNEBtYWlsaW5hdG9yLmNvbToxMjM0NQ==",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"account\":{\"email\":\"{{emailDinamico}}\"}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{url_base}}/nga/api/v1.1/private/accounts?lang=es",
+					"protocol": "https",
+					"host": [
+						"{{url_base}}"
+					],
+					"path": [
+						"nga",
+						"api",
+						"v1.1",
+						"private",
+						"accounts"
+					],
+					"query": [
+						{
+							"key": "lang",
+							"value": "es"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ObtenerInfoUsuario",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validar el código de respuesta sea igual a 200\", function(){",
+							"    pm.expect(pm.response.code).to.eql(200)",
+							"});",
+							"",
+							"pm.test(\"Validar que el tiempo de respuesta es menor a 2seg\", function(){",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000)",
+							"});",
+							"",
+							"pm.test(\"Validar que el body no viene vacio\", function(){",
+							"    pm.expect(pm.response.body).not.to.be.null;",
+							"});",
+							"",
+							"pm.test(\"Validar que el body response contenga los campos de un anuncio\", function(){",
+							"    pm.expect(pm.response.text()).to.include('access_token')",
+							"    pm.expect(pm.response.text()).to.include('account_id')",
+							"});",
+							"",
+							"pm.test(\"Validar que en el body se encuentra el usuario\", function(){",
+							"    let user = pm.environment.get('email')",
+							"    pm.expect(pm.response.text()).to.include(user)",
+							"});",
+							"",
+							"pm.test(\"Validar que el campo email contiene el email esperado\", function(){",
+							"    console.log(\"response : \", pm.response.json().account.email)",
+							"    let userVariable = pm.environment.get('email')",
+							"    let userResponse = pm.response.json().account.email",
+							"    pm.expect(userResponse).to.be.eq(userVariable);",
+							"});",
+							"",
+							"pm.test(\"Validar que el campo subject regresa un dato tipo STRING\", function(){",
+							"    //console.log(\"Response body:  \",typeof (pm.response.json().access_token))",
+							"    var tipoToken = pm.response.json().access_token;",
+							"    pm.expect(tipoToken).to.be.a(\"string\")",
+							"});",
+							"",
+							"pm.environment.set(\"account_id\",pm.response.json().account.account_id)",
+							"pm.environment.set(\"token\",pm.response.json().access_token)",
+							"pm.environment.set('uuid',pm.response.json().account.uuid)",
+							"",
+							"console.log(pm.response.json().account.account_id);",
+							"let accountID1 = pm.response.json().account.account_id;",
+							"console.log(accountID1.split('/')[3])",
+							"pm.environment.set('account_id_solo',accountID1.split('/')[3])",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{pass}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{email}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic dmVudGFzXzIzNEBtYWlsaW5hdG9yLmNvbToxMjM0NQ==",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"account\":{\"email\":\"{{email}}\"}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{url_base}}/nga/api/v1.1/private/accounts?lang=es",
+					"protocol": "https",
+					"host": [
+						"{{url_base}}"
+					],
+					"path": [
+						"nga",
+						"api",
+						"v1.1",
+						"private",
+						"accounts"
+					],
+					"query": [
+						{
+							"key": "lang",
+							"value": "es"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EditarUsuario",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var nombre = pm.variables.replaceIn(\"{{$randomFirstName}}\")",
+							"pm.environment.set(\"nombre\", nombre)",
+							"",
+							"var apellido= pm.variables.replaceIn(\"{{$randomLastName}}\")",
+							"pm.environment.set(\"apellido\", apellido)",
+							"",
+							"var telefono= pm.variables.replaceIn(\"{{$randomPhoneNumber}}\")",
+							"pm.environment.set(\"telefono\", telefono)",
+							"",
+							"var randomBoolean= pm.variables.replaceIn(\"{{$randomBoolean}}\")",
+							"pm.environment.set(\"randomBoolean\", randomBoolean)",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validar el código de respuesta sea igual a 200\", function(){",
+							"    pm.expect(pm.response.code).to.eql(200)",
+							"});",
+							"",
+							"pm.test(\"Validar que el tiempo de respuesta es menor a 2seg\", function(){",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000)",
+							"});",
+							"",
+							"pm.test(\"Validar que el body no viene vacio\", function(){",
+							"    pm.expect(pm.response.body).not.to.be.null;",
+							"});",
+							"",
+							"pm.test(\"Validar que el body response contenga los campos de un anuncio\", function(){",
+							"    pm.expect(pm.response.text()).to.include('uuid')",
+							"    pm.expect(pm.response.text()).to.include('account_id')",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "tag:scmcoord.com,2013:api {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"account\": {\n        \"name\": \"{{nombre}} {{apellido}}\",\n        \"phone\": \"{{telefono}}\",\n        \"professional\": {{randomBoolean}},\n        \"phone_hidden\": {{randomBoolean}}\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{url_base}}/nga/api/v1{{account_id}}?lang=es",
+					"protocol": "https",
+					"host": [
+						"{{url_base}}"
+					],
+					"path": [
+						"nga",
+						"api",
+						"v1{{account_id}}"
+					],
+					"query": [
+						{
+							"key": "lang",
+							"value": "es"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearUnAnuncio",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var randomPrice = pm.variables.replaceIn(\"{{$randomInt}}\")",
+							"pm.environment.set(\"randomPrice\", randomPrice)",
+							"",
+							"var randomProductAdjective = pm.variables.replaceIn(\"{{$randomProductAdjective}}\")",
+							"pm.environment.set(\"randomProductAdjective\", randomProductAdjective)",
+							"",
+							"//pre-request",
+							"let getTokenRequest = {",
+							"    method: 'POST',",
+							"    url: 'https://webapi.segundamano.mx/nga/api/v1.1/private/accounts?lang=es',",
+							"    header:{",
+							"        Authorization: 'Basic dmVudGFzXzIzNEBtYWlsaW5hdG9yLmNvbToxMjM0NQ=='",
+							"    }",
+							"};",
+							"",
+							"pm.sendRequest(getTokenRequest, function(err,response){",
+							"    console.log(\"Response pre-request: \",response.json())",
+							"    pm.environment.set('token',response.json().access_token)",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"ad_id\",pm.response.json().data.ad.ad_id)",
+							"",
+							"pm.test(\"Validar el código de respuesta sea igual a 200\", function(){",
+							"    pm.expect(pm.response.code).to.eql(200)",
+							"});",
+							"",
+							"pm.test(\"Validar que el tiempo de respuesta es menor a 4 seg\", function(){",
+							"    pm.expect(pm.response.responseTime).to.be.below(4000)",
+							"});",
+							"",
+							"pm.test(\"Validar que el body no viene vacio\", function(){",
+							"    pm.expect(pm.response.body).not.to.be.null;",
+							"});",
+							"",
+							"pm.test(\"Validar que el body response contenga los campos de un anuncio\", function(){",
+							"    pm.expect(pm.response.text()).to.include('ad_id\"')",
+							"    pm.expect(pm.response.text()).to.include('subject')",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{token}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{uuid}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-source",
+						"value": "PHOENIX_DESKTOP",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"images\": \"2265766694.jpg\",\n    \"category\": \"4100\",\n    \"subject\": \"{{randomProductAdjective}} estampillas para colección\",\n    \"body\": \"{{randomProductAdjective}} Compra y venta e intercambio de estampillas para colección seria\",\n    \"is_new\": \"0\",\n    \"region\": \"12\",\n    \"municipality\": \"316\",\n    \"area\": \"69520\",\n    \"price\": \"{{randomPrice}}\",\n    \"phone_hidden\": \"true\",\n    \"show_phone\": \"false\",\n    \"contact_phone\": \"267-941-5539\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{url_base}}/v2/accounts/{{uuid}}/up",
+					"protocol": "https",
+					"host": [
+						"{{url_base}}"
+					],
+					"path": [
+						"v2",
+						"accounts",
+						"{{uuid}}",
+						"up"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "VerAnuncio",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var adID = pm.environment.get(\"ad_id\");",
+							"",
+							"pm.test(\"Validar el ID del anuncio\", function(){",
+							"    pm.expect(pm.response.json().list_id).to.eq(adID)",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{url_base}}/ad-stats/v1/public/accounts/{{account_id_solo}}/ads/{{ad_id}}",
+					"protocol": "https",
+					"host": [
+						"{{url_base}}"
+					],
+					"path": [
+						"ad-stats",
+						"v1",
+						"public",
+						"accounts",
+						"{{account_id_solo}}",
+						"ads",
+						"{{ad_id}}"
+					],
+					"query": [
+						{
+							"key": "period",
+							"value": "7d",
+							"disabled": true
+						},
+						{
+							"key": "lang",
+							"value": "es",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EditarAnuncio",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"ad_id\",pm.response.json().data.ad.ad_id)",
+							"",
+							"pm.test(\"Validar el código de respuesta sea igual a 200\", function(){",
+							"    pm.expect(pm.response.code).to.eql(200)",
+							"});",
+							"",
+							"pm.test(\"Validar que el tiempo de respuesta es menor a 4 seg\", function(){",
+							"    pm.expect(pm.response.responseTime).to.be.below(4000)",
+							"});",
+							"",
+							"pm.test(\"Validar que el body no viene vacio\", function(){",
+							"    pm.expect(pm.response.body).not.to.be.null;",
+							"});",
+							"",
+							"pm.test(\"Validar que el body response contenga los campos de un anuncio\", function(){",
+							"    pm.expect(pm.response.text()).to.include('ad_id\"')",
+							"    pm.expect(pm.response.text()).to.include('subject')",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{token}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{uuid}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-source",
+						"value": "PHOENIX_DESKTOP",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"category\": \"8143\",\n    \"subject\": \"Organizamos tu evento y mas\",\n    \"body\": \"trabajamos todo tipo de eventos, desde bautizos hasta bodas. Pregunte sin compromiso. Hacemos Cotizaciones\",\n    \"region\": \"5\",\n    \"municipality\": \"51\",\n    \"area\": \"36611\",\n    \"price\": \"20000\",\n    \"phone_hidden\": \"true\",\n    \"show_phone\": \"false\",\n    \"contact_phone\": \"76013183\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{url_base}}/v2/accounts/{{uuid}}/up/{{ad_id}}",
+					"protocol": "https",
+					"host": [
+						"{{url_base}}"
+					],
+					"path": [
+						"v2",
+						"accounts",
+						"{{uuid}}",
+						"up",
+						"{{ad_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "VerAnuncioDespuesDeEdicion",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var adID = pm.environment.get(\"ad_id\");",
+							"",
+							"pm.test(\"Validar el ID del anuncio\", function(){",
+							"    pm.expect(pm.response.json().list_id).to.eq(adID)",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{url_base}}/ad-stats/v1/public/accounts/{{account_id_solo}}/ads/{{ad_id}}",
+					"protocol": "https",
+					"host": [
+						"{{url_base}}"
+					],
+					"path": [
+						"ad-stats",
+						"v1",
+						"public",
+						"accounts",
+						"{{account_id_solo}}",
+						"ads",
+						"{{ad_id}}"
+					],
+					"query": [
+						{
+							"key": "period",
+							"value": "7d",
+							"disabled": true
+						},
+						{
+							"key": "lang",
+							"value": "es",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearDireccion",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{token}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{uuid}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "contact",
+							"value": "{{nombre}} {{apellido}}",
+							"type": "text"
+						},
+						{
+							"key": "phone",
+							"value": "9878675654",
+							"type": "text"
+						},
+						{
+							"key": "rfc",
+							"value": "XAXX010101000",
+							"type": "text"
+						},
+						{
+							"key": "zipCode",
+							"value": "11011",
+							"type": "text"
+						},
+						{
+							"key": "exteriorInfo",
+							"value": "Morelia 4567",
+							"type": "text"
+						},
+						{
+							"key": "interiorInfo",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "region",
+							"value": "11",
+							"type": "text"
+						},
+						{
+							"key": "municipality",
+							"value": "300",
+							"type": "text"
+						},
+						{
+							"key": "area",
+							"value": "8082",
+							"type": "text"
+						},
+						{
+							"key": "alias",
+							"value": "La casa test",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://{{url_base}}/addresses/v1/create",
+					"protocol": "https",
+					"host": [
+						"{{url_base}}"
+					],
+					"path": [
+						"addresses",
+						"v1",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BorrarAnuncio",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "tag:scmcoord.com,2013:api {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"delete_reason\":{\"code\":\"2\"}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{url_base}}/nga/api/v1/{{account_id}}/klfst/{{ad_id}}",
+					"protocol": "https",
+					"host": [
+						"{{url_base}}"
+					],
+					"path": [
+						"nga",
+						"api",
+						"v1",
+						"{{account_id}}",
+						"klfst",
+						"{{ad_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ConsularSiAnuncioFuePublicado",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ids\": [\n        \"{{ad_id}}\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{url_base}}/urls/v1/public/ad-view?lang=es",
+					"protocol": "https",
+					"host": [
+						"{{url_base}}"
+					],
+					"path": [
+						"urls",
+						"v1",
+						"public",
+						"ad-view"
+					],
+					"query": [
+						{
+							"key": "lang",
+							"value": "es"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
