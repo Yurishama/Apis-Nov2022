@@ -1,3 +1,4 @@
+import com.github.javafaker.Faker;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.restassured.AllureRestAssured;
@@ -325,6 +326,105 @@ public class eCommerce {
         //pm.environment.set("ad_id",pm.response.json().data.ad.ad_id)
         JsonPath jsonResponse = response.jsonPath();
         ad_id = jsonResponse.get("data.ad.ad_id");
+
+    }
+
+    @Test
+    @Order(6)
+    @Severity(SeverityLevel.MINOR)
+    @DisplayName("Test case: Editar datos del usuario")
+    public void editar_datos_de_usuario(){
+
+        //Datos random -  fakerjs
+        Faker faker = new Faker();
+        String name = faker.name().fullName();
+        String fname = faker.name().firstName();
+        String lastname = faker.name().lastName();
+
+        String randomData = faker.country().name();
+
+        String phone = faker.phoneNumber().cellPhone();
+
+        System.out.println("Nombre completo: " + name);
+
+        String body_request= "{\n" +
+                "    \"account\": {\n" +
+                "        \"name\": \""+name+"\",\n" +
+                "        \"phone\": \""+phone+"\",\n" +
+                "        \"professional\": true,\n" +
+                "        \"phone_hidden\": true\n" +
+                "    }\n" +
+                "}";
+
+        String token = obtener_Token();
+        System.out.println(("Token en la prueba Crear anuncio " + token));
+
+        RestAssured.baseURI=String.format("https://%s/nga/api/v1%s?lang=es",url_base,account_id);
+
+        Response response = given()
+                .log().all()
+                .filter(new AllureRestAssured())
+                .contentType("application/json")
+                .header("Accept","*/*")
+                .header("Authorization","tag:scmcoord.com,2013:api "+token)
+                .body(body_request)
+                .patch();
+
+        String body_response = response.getBody().prettyPrint();
+
+        //Junit 5 - Pruebas
+
+        //validar el status code
+        System.out.println("Status response: " + response.getStatusCode());
+
+        assertEquals(200,response.getStatusCode());
+
+        //Validar que el body response no venga vacio
+        assertNotNull(body_response);
+
+        //Validar quel body response contenga algunos campos
+        assertTrue(body_response.contains("ad_id"));
+        assertTrue(body_response.contains("subject"));
+        assertTrue(body_response.contains("category"));
+
+        System.out.println("Tiempo respuesta: " + response.getTime());
+        long tiempo = response.getTime();
+        assertTrue(tiempo < 3500);
+
+        String headers_response = response.getHeaders().toString();
+        assertTrue(headers_response.contains("application/json"));
+
+
+    }
+
+    @Test
+    @Order(7)
+    public void crear_una_Direccion(){
+
+        String token = obtener_Token();
+
+        RestAssured.baseURI = String.format("https://%s/addresses/v1/create",url_base);
+
+        Response response =  given()
+                .log().all()
+                .filter(new AllureRestAssured())
+                .formParam("contact","Agente de ventas")
+                .formParam("phone","8979876576")
+                .formParam("rfc","XAXX010101000")
+                .formParam("zipCode","11011")
+                .formParam("exteriorInfo","Hidalgo 897")
+                .formParam("interiorInfo","3")
+                .formParam("region","11")
+                .formParam("municipality","300")
+                .formParam("area","8094")
+                .formParam("alias","Oficina")
+                .contentType("application/x-www-form-urlencoded")
+                .header("Accept","application/json, text/plain, */*")
+                .auth().preemptive().basic(uuid,token)
+                .post();
+
+        String body_response = response.getBody().prettyPrint();
+        System.out.println("Body bonito:"+body_response);
 
 
     }
